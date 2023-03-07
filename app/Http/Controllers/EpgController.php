@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Assert\Assert;
 use App\Contracts\Queues\EpgPublisher;
 use App\Contracts\Storage\EpgStorage;
 use App\Query\EpgCreateQuery;
@@ -14,6 +15,7 @@ use Enalean\Prometheus\Storage\Store;
 use Enalean\Prometheus\Value\MetricLabelNames;
 use Enalean\Prometheus\Value\MetricName;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Routing\Controller;
 use Psr\Http\Message\ServerRequestInterface;
@@ -86,6 +88,11 @@ final class EpgController extends Controller
         );
 
         $now = CarbonImmutable::now();
+
+        Assert::true(
+            Str::contains($request->getHeaderLine('Content-Type'), ['/json', '+json']),
+            'Expected json Content-Type'
+        );
 
         $query = EpgCreateQuery::fromRequest((array)$request->getParsedBody());
 

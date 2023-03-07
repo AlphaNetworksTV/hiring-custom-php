@@ -14,6 +14,7 @@ final class HomeController extends Controller
         return JsonResponse::create([
             'name' => config('app.name'),
             'version' => config('aepg.version'),
+            'test' => 'hello world'
         ]);
     }
 }
