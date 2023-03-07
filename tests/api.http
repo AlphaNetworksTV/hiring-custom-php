@@ -1,0 +1,94 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+GET http://localhost:8080
+
+###
+
+POST http://localhost:8080/v1/epgs
+Host: epg-api.local
+#Content-Type: application/json
+Accept: application/json
+
+{}
+
+###
+
+POST http://localhost:8080/v1/epgs
+Host: epg-api.local
+Content-Type: application/json
+Accept: application/json
+
+{
+  "channel_id": 1,
+  "start_date": "2019-03-09T00:00:00+00:00",
+  "broadcasts": [
+    {
+      "id": 42,
+      "airing_start": "2019-03-09T14:00:00+00:00",
+      "airing_end": "2019-03-09T15:00:00+00:00",
+      "provider": {
+        "name": "plurimedia",
+        "broadcast_id": "c50b4472-525a-44e6-ae0e-b0d2edec4394",
+        "last_update": "2019-03-01T00:00:00+00:00"
+      },
+      "title": "James Bond",
+      "sub_title": "The Spectre returns",
+      "multilingual": true,
+      "parental_rating": "-16 (FR), R (for US)",
+      "synopsis": "James Bond does spying",
+      "audio_format": "Stereo",
+      "category": "Movie",
+      "sub_category": "Action",
+      "asset": {
+        "id": 42,
+        "last_update": "2019-03-01T00:00:00+00:00",
+        "duration": 3600
+      }
+    }
+  ]
+}
+
+###
+
+POST http://localhost:8080/v1/epgs
+Host: epg-api.local
+Content-Type: application/json
+Accept: application/json
+
+{
+  "channel_id": 1,
+  "start_date": "2019-03-09T00:00:00+00:00",
+  "broadcasts": [
+    {
+      "id": 42,
+      "airing_start": "2019-03-09T14:00:00+00:00",
+      "airing_end": "2019-03-09T15:00:00+00:00",
+      "provider": {
+        "name": "tucano-plurimedia",
+        "broadcast_id": "c50b4472-525a-44e6-ae0e-b0d2edec4394",
+        "last_update": "2019-03-01T00:00:00+00:00"
+      },
+      "title": "James Bond",
+      "sub_title": "The Spectre returns",
+      "multilingual": true,
+      "parental_rating": "-16 (FR), R (for US)",
+      "synopsis": "James Bond does spying",
+      "audio_format": "Stereo",
+      "category": "Movie",
+      "sub_category": "Action",
+      "asset": {
+        "id": 42,
+        "last_update": "2019-03-01T00:00:00+00:00",
+        "duration": 3600
+      }
+    }
+  ]
+}
+
+###
+

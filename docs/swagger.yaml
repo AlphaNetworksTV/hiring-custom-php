@@ -1,0 +1,177 @@
+openapi: 3.0.3
+info:
+  description: "This is the overview of the Accurate EPG EPG API"
+  version: 1.0.0
+  title: "Accurate EPG EPG API"
+servers:
+  - url: 'http://api.aepg-dev.hubee.in/'
+  - url: 'https://api.aepg.hubee.tv/'
+paths:
+  '/v1/epgs':
+    post:
+      summary: "Send an EPG"
+      description: "Send an EPG for ingest"
+      operationId: createEpg
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EPG"
+        required: true
+      responses:
+        '202':
+          description: "EPG accepted"
+        '404':
+          description: "Channel not found"
+        '400':
+          description: "EPG validation error"
+      security:
+        - OAuth2-prod: [aepg-epg-create]
+        - OAuth2-dev: [aepg-epg-create]
+components:
+  schemas:
+    EPG:
+      type: object
+      required:
+        - channel_id
+        - start_date
+        - broadcasts
+      properties:
+        channel_id:
+          type: integer
+          format: int32
+          description: "ID of channel"
+        start_date:
+          type: string
+          format: date-time
+          description: "When this EPG starts"
+          example: "2019-03-09T14:00:00+00:00"
+        broadcasts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EPGBroadcast'
+    EPGBroadcast:
+      type: object
+      description: |
+        Broadcast of an asset.
+
+        Some properties must be contextualized for the Broadcast; eg. James Bond "Skyfall" is called "007 Skyfall" in Quebec
+
+        All properties flagged with "contextualization required" must follow this rule
+      required:
+        - id
+        - airing_start
+        - airing_end
+        - provider
+        - title
+        - asset
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: "Id of normalized broadcast"
+          example: 42
+        airing_start:
+          type: string
+          format: date-time
+          description: "When the broadcast starts"
+          example: "2019-03-09T14:00:00+00:00"
+        airing_end:
+          type: string
+          format: date-time
+          description: "When the broadcast ends"
+          example: "2019-03-09T15:00:00+00:00"
+        provider:
+          type: object
+          required:
+            - name
+            - broadcast_id
+            - last_update
+          properties:
+            name:
+              type: string
+              description: "Provider's name"
+            broadcast_id:
+              type: string
+              description: "Provider's id for this broadcast"
+              example: "c50b4472-525a-44e6-ae0e-b0d2edec4394"
+            last_update:
+              type: string
+              format: date-time
+              description: "When the broadcast has been updated by the provider"
+              example: "2019-03-01T00:00:00+00:00"
+        title:
+          type: string
+          description: "Title of the asset (contextualization required)"
+          example: "James Bond"
+        sub_title:
+          type: string
+          description: "Sub title of the asset (contextualization required)"
+          example: "The Spectre returns"
+        multilingual:
+          type: boolean
+          description: "Is multi audio available (contextualization required)"
+        parental_rating:
+          type: string
+          description: "Parental rating (contextualization required)"
+          example: "-16 (FR), R (for US)"
+        synopsis:
+          type: string
+          description: "Synopsis (contextualization required)"
+          example: "James Bond does spying"
+        audio_format:
+          type: string
+          description: "Audio format (contextualization required)"
+          example: "Stereo"
+        category:
+          type: string
+          description: "Category of the asset (contextualization required)"
+          example: "Movie"
+        sub_category:
+          type: string
+          description: "Sub category of the asset (contextualization required)"
+          example: "Action"
+        asset:
+          type: object
+          required:
+            - id
+            - last_update
+            - duration
+          properties:
+            id:
+              type: integer
+              format: int64
+              description: "Id of the asset"
+              example: 42
+            last_update:
+              type: string
+              format: date-time
+              description: "When the asset has been updated by the provider"
+              example: "2019-03-01T00:00:00+00:00"
+            duration:
+              type: integer
+              format: int32
+              description: "Duration of the asset, in seconds"
+  securitySchemes:
+    OAuth2-prod:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: "https://auth.aepg.hubee.tv/oauth/token"
+          scopes:
+            aepg-epg-create: "Grants access for sending EPG"
+        clientCredentials:
+          tokenUrl: "https://auth.aepg.hubee.tv/oauth/token"
+          scopes:
+            aepg-epg-create: "Grants access for sending EPG"
+    OAuth2-dev:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: "http://auth.aepg-dev.hubee.in/oauth/token"
+          scopes:
+            aepg-epg-create: "Grants access for sending EPG"
+        clientCredentials:
+          tokenUrl: "http://auth.aepg-dev.hubee.in/oauth/token"
+          scopes:
+            aepg-epg-create: "Grants access for sending EPG"

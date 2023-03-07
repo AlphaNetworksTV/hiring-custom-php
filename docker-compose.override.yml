@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  debug:
+    volumes:
+      - .:/opt/app
+    ports:
+      - "8080:8080"
+
+  test:
+    volumes:
+      - .:/opt/app
+
+  storage:
+    volumes:
+      - ./minio/data:/data
+
+  metrics-gateway:
+    ports:
+      - "9091:9091"

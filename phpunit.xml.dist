@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd" bootstrap="bootstrap/app.php"
+         colors="true">
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./app</directory>
+        </include>
+        <report>
+            <text outputFile="php://stdout" showOnlySummary="true"/>
+        </report>
+    </coverage>
+    <testsuites>
+        <testsuite name="all">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_NAME" value="epg-api"/>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_DEBUG" value="true"/>
+        <env name="APP_DEBUG_TRACE" value="true"/>
+
+        <env name="REDIS_CACHE_URL" value="tcp://cache:6379"/>
+
+        <env name="STORAGE_ENDPOINT" value="http://storage:9000"/>
+        <env name="STORAGE_ACCESS_KEY" value="test-user"/>
+        <env name="STORAGE_SECRET_KEY" value="test-password"/>
+        <env name="STORAGE_BUCKET" value="tests"/>
+        <env name="STORAGE_REGION" value="eu-west-1"/>
+        <env name="STORAGE_FOLDER" value="epg-api"/>
+
+        <env name="METRICS_PUSH_GATEWAY" value="http://metrics-gateway:9091"/>
+    </php>
+</phpunit>

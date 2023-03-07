@@ -1,0 +1,39 @@
+FROM php:7.4-alpine
+
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions
+RUN install-php-extensions mbstring bcmath pcntl pdo pdo_mysql intl sockets curl zip ds redis xdebug
+
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /usr/local/bin/docker-compose-wait
+RUN chmod +x  /usr/local/bin/docker-compose-wait
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /opt/app
+COPY . /opt/app
+
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install -o
+
+COPY tests/tests.docker-entrypoint.sh /docker-entrypoint.sh
+
+ENV APP_ENV "local"
+ENV APP_TIMEZONE "UTC"
+ENV LOG_CHANNEL "errorlog"
+
+ENV APP_DEBUG "false"
+ENV APP_DEBUG_TRACE "false"
+
+ENV METRICS_PUSH_GATEWAY 'http://metrics-gateway:9091'
+
+ENV APP_NAME "epg-api"
+
+ENV REDIS_CACHE_URL "tcp://cache:6379"
+
+ENV STORAGE_ENDPOINT "http://storage:9000"
+ENV STORAGE_ACCESS_KEY "test-user"
+ENV STORAGE_SECRET_KEY "test-password"
+ENV STORAGE_BUCKET "bucket"
+ENV STORAGE_REGION "eu-west-1"
+ENV STORAGE_FOLDER "epg-api"
+
+CMD ["sh", "/docker-entrypoint.sh"]

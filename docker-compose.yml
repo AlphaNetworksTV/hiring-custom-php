@@ -1,0 +1,51 @@
+version: "3.9"
+services:
+  debug:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    entrypoint: "php"
+    command: ["-S", "0.0.0.0:8080", "-t", "public", "public/index.php"]
+    volumes:
+      - storage:/storage
+    depends_on:
+      - storage
+      - metrics-gateway
+      - cache
+    environment:
+      WAIT_HOSTS: "storage:9000,metrics-gateway:9091,cache:6379"
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - storage:/storage
+    depends_on:
+      - storage
+      - metrics-gateway
+      - cache
+    environment:
+      WAIT_HOSTS: "storage:9000,metrics-gateway:9091,cache:6379"
+
+  # external services
+
+  storage:
+    image: minio/minio:RELEASE.2019-09-11T19-53-16Z
+    volumes:
+      - storage:/data
+#    command: server /data
+    entrypoint: sh
+    command: -c 'mkdir -p /data/bucket && /usr/bin/minio server /data'
+    environment:
+      MINIO_ACCESS_KEY: test-user
+      MINIO_SECRET_KEY: test-password
+
+  metrics-gateway:
+    image: prom/pushgateway:v1.5.1
+
+  cache:
+    image: redis:6.0-alpine
+
+volumes:
+  storage:

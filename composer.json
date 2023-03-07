@@ -1,0 +1,66 @@
+{
+  "name": "alphanetworks/aepg-epg-api",
+  "description": "AEPG Project: EPG API component",
+  "license": "proprietary",
+  "type": "project",
+  "require": {
+    "php": ">=7.4",
+    "ext-json": "*",
+    "ext-pdo": "*",
+    "ext-redis": "*",
+    "ext-zlib": "*",
+    "crazycodr/standard-exceptions": "^2.4",
+    "enqueue/amqp-lib": "^0.10.9",
+    "illuminate/redis": "^6.20",
+    "kamranahmedse/laravel-faulty": "^1.1",
+    "laravel/lumen-framework": "^6.0",
+    "league/flysystem": "^2.1",
+    "league/flysystem-aws-s3-v3": "^2.0",
+    "league/uri": "^6.7",
+    "league/uri-components": "^2.4",
+    "nesbot/carbon": "^2.51",
+    "nyholm/psr7": "^1.4",
+    "php-http/client-common": "^2.3",
+    "php-http/discovery": "^1.14",
+    "phpunit/php-timer": "^5.0",
+    "spatie/data-transfer-object": "^2.8",
+    "symfony/http-client": "^5.2",
+    "symfony/psr-http-message-bridge": "^2.1",
+    "tuleap/prometheus-client": "^1.2",
+    "webmozart/assert": "^1.11"
+  },
+  "require-dev": {
+    "mcustiel/phiremock-client": "^1.2",
+    "mockery/mockery": "^1.2",
+    "phpunit/phpunit": "^9.5"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true
+    },
+    "optimize-autoloader": true,
+    "platform": {
+      "php": "7.4.33"
+    },
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "scripts": {
+    "tests": [
+      "@putenv XDEBUG_MODE=coverage",
+      "phpunit --colors=never --testsuite all --log-junit tests-results/report.xml"
+    ]
+  }
+}
